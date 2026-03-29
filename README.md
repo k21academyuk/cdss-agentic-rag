@@ -447,8 +447,6 @@ az containerapp show -g "$RG" -n "$APP" \
 
 ## 8) Optional recovery: ensure Azure AI Search indexes exist (only if step 4 failed before Search bootstrap completed)
 
-# requires: RG is already exported
-
 ```bash
 SEARCH_NAME="${SEARCH_NAME:-$(az search service list -g "$RG" --query "[0].name" -o tsv)}"
 ORIG_PNA="$(az search service show -g "$RG" -n "$SEARCH_NAME" --query publicNetworkAccess -o tsv)"
