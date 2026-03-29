@@ -1,0 +1,66 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "eastus2"
+    },
+    "environment": {
+      "value": "dev"
+    },
+    "projectName": {
+      "value": "cdss"
+    },
+    "containerImage": {
+      "value": "cdssacr.azurecr.io/cdss-api:latest"
+    },
+    "acrUseManagedIdentity": {
+      "value": false
+    },
+    "acrName": {
+      "value": ""
+    },
+    "acrCreate": {
+      "value": false
+    },
+    "acrSku": {
+      "value": "Standard"
+    },
+    "gpt4oDeploymentName": {
+      "value": "gpt-4o"
+    },
+    "gpt4oMiniDeploymentName": {
+      "value": "gpt-4o-mini"
+    },
+    "embeddingDeploymentName": {
+      "value": "text-embedding-3-large"
+    },
+    "cosmosDatabaseName": {
+      "value": "cdss-db"
+    },
+    "corsAllowedOrigins": {
+      "value": [
+        "http://localhost:3000",
+        "http://localhost:3001"
+      ]
+    },
+    "authEnabled": {
+      "value": false
+    },
+    "authAudience": {
+      "value": ""
+    },
+    "authRequiredScopes": {
+      "value": []
+    },
+    "tags": {
+      "value": {
+        "project": "cdss-agentic-rag",
+        "environment": "dev",
+        "managedBy": "bicep",
+        "team": "clinical-ai",
+        "costCenter": "research"
+      }
+    }
+  }
+}

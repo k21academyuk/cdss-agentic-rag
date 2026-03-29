@@ -1,0 +1,150 @@
+# ============================================================================
+# Git Ignore - CDSS Agentic RAG (Python + Azure + Docker)
+# ============================================================================
+
+# ----- Python -----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+sdist/
+develop-eggs/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+
+# Linting
+.ruff_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# ----- Environment & Secrets -----
+.env
+.env.*
+!.env.example
+!frontend/.env.example
+!frontend/.env.production
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.production.local
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+credentials/
+secrets/
+local.settings.json
+
+# ----- Azure -----
+.azure/
+.azure-tmp/
+azuredeploy.parameters.local.json
+*.env.azure
+.env.azure
+
+# ----- Docker -----
+docker-compose.override.yml
+
+# ----- IDE & Editors -----
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# ----- OS Files -----
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ----- Logs -----
+*.log
+logs/
+*.log.*
+
+# ----- Data & Models (large files) -----
+data/
+*.parquet
+*.csv
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.onnx
+*.bin
+*.pt
+*.pth
+
+# ----- Misc -----
+*.bak
+*.tmp
+*.temp
+.scratch/
+.sisyphus/
+tmp/
+temp/
+cdss_azure_deployment.txt
+
+# ----- Local AI/Prompt Artifacts -----
+CLAUDE.md
+cdss claude code implementation prompt.md
+frontend/REFACTOR_AUDIT.md
+frontend/.gitignore
+
+# ----- Node.js / Frontend -----
+node_modules/
+*.tsbuildinfo
+dist/
+
+frontend/playwright-report/
+frontend/test-results/
+
+/frontend/.env.production

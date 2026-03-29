@@ -1,0 +1,77 @@
+# ============================================================================
+# Docker Ignore - CDSS Agentic RAG
+# ============================================================================
+
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.egg-info
+dist/
+build/
+.eggs/
+*.egg
+
+# Virtual environments
+.venv
+venv
+env
+.env
+.env.*
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache
+.coverage
+htmlcov/
+.mypy_cache
+.ruff_cache
+
+# Infrastructure (not needed in container)
+infra/
+*.bicep
+*.bicepparam
+
+# Docker
+Dockerfile
+docker-compose.yml
+docker-compose.*.yml
+.dockerignore
+
+# Documentation (not needed in container except README.md)
+docs/
+LICENSE
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.azure-pipelines/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Notebooks
+*.ipynb
+.ipynb_checkpoints/
+
+# Logs
+*.log
+logs/
+
+# Secrets and credentials
+*.pem
+*.key
+*.crt
+credentials/
+secrets/

@@ -1,0 +1,69 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "eastus2"
+    },
+    "environment": {
+      "value": "staging"
+    },
+    "projectName": {
+      "value": "cdss"
+    },
+    "containerImage": {
+      "value": "cdssacr.azurecr.io/cdss-api:latest"
+    },
+    "acrUseManagedIdentity": {
+      "value": false
+    },
+    "acrName": {
+      "value": ""
+    },
+    "acrCreate": {
+      "value": false
+    },
+    "acrSku": {
+      "value": "Standard"
+    },
+    "gpt4oDeploymentName": {
+      "value": "gpt-4o"
+    },
+    "gpt4oMiniDeploymentName": {
+      "value": "gpt-4o-mini"
+    },
+    "embeddingDeploymentName": {
+      "value": "text-embedding-3-large"
+    },
+    "cosmosDatabaseName": {
+      "value": "cdss-db"
+    },
+    "corsAllowedOrigins": {
+      "value": [
+        "https://staging-cdss-frontend.example.com",
+        "http://localhost:3000",
+        "http://localhost:3001"
+      ]
+    },
+    "authEnabled": {
+      "value": true
+    },
+    "authAudience": {
+      "value": "api://cdss-api-staging"
+    },
+    "authRequiredScopes": {
+      "value": [
+        "access_as_user"
+      ]
+    },
+    "tags": {
+      "value": {
+        "project": "cdss-agentic-rag",
+        "environment": "staging",
+        "managedBy": "bicep",
+        "team": "clinical-ai",
+        "costCenter": "pre-production"
+      }
+    }
+  }
+}

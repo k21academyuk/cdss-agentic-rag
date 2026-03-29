@@ -1,0 +1,79 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "eastus2"
+    },
+    "environment": {
+      "value": "prod"
+    },
+    "prodPublicApi": {
+      "value": false
+    },
+    "projectName": {
+      "value": "cdss"
+    },
+    "containerImage": {
+      "value": "cdssacr.azurecr.io/cdss-api:latest"
+    },
+    "acrUseManagedIdentity": {
+      "value": false
+    },
+    "acrName": {
+      "value": ""
+    },
+    "acrCreate": {
+      "value": false
+    },
+    "acrSku": {
+      "value": "Standard"
+    },
+    "gpt4oDeploymentName": {
+      "value": "gpt-4o"
+    },
+    "gpt4oMiniDeploymentName": {
+      "value": "gpt-4o-mini"
+    },
+    "embeddingDeploymentName": {
+      "value": "text-embedding-3-large"
+    },
+    "gpt4oCapacity": {
+      "value": 30
+    },
+    "gpt4oMiniCapacity": {
+      "value": 40
+    },
+    "embeddingCapacity": {
+      "value": 40
+    },
+    "cosmosDatabaseName": {
+      "value": "cdss-db"
+    },
+    "corsAllowedOrigins": {
+      "value": [
+        "https://proud-dune-00b48820f.1.azurestaticapps.net"
+      ]
+    },
+    "authEnabled": {
+      "value": true
+    },
+    "authAudience": {
+      "value": "api://cdss-api"
+    },
+    "authRequiredScopes": {
+      "value": [
+        "access_as_user"
+      ]
+    },
+    "tags": {
+      "value": {
+        "project": "cdss-agentic-rag",
+        "environment": "prod",
+        "managedBy": "bicep",
+        "team": "clinical-ai",
+        "costCenter": "production"
+      }
+    }
+  }
+}

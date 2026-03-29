@@ -1,0 +1,182 @@
+# ============================================================================
+# Clinical Decision Support System - Local Development Environment
+# ============================================================================
+#
+# Usage:
+#   docker compose up -d          # Start all services
+#   docker compose up cdss-api    # Start only the API (with dependencies)
+#   docker compose logs -f        # Tail all logs
+#   docker compose down -v        # Stop and remove volumes
+#
+# ============================================================================
+
+services:
+  # --------------------------------------------------------------------------
+  # CDSS FastAPI Application
+  # --------------------------------------------------------------------------
+  cdss-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: cdss-api
+    ports:
+      - "8000:8000"
+    environment:
+      - CDSS_DEBUG=true
+      - CDSS_LOG_LEVEL=DEBUG
+      # Azure OpenAI (use actual keys for development or mock endpoints)
+      - CDSS_AZURE_OPENAI_ENDPOINT=${CDSS_AZURE_OPENAI_ENDPOINT:-http://localhost:8080}
+      - CDSS_AZURE_OPENAI_API_KEY=${CDSS_AZURE_OPENAI_API_KEY:-dev-key}
+      - CDSS_AZURE_OPENAI_DEPLOYMENT_NAME=${CDSS_AZURE_OPENAI_DEPLOYMENT_NAME:-gpt-4o}
+      - CDSS_AZURE_OPENAI_MINI_DEPLOYMENT_NAME=${CDSS_AZURE_OPENAI_MINI_DEPLOYMENT_NAME:-gpt-4o-mini}
+      - CDSS_AZURE_OPENAI_EMBEDDING_DEPLOYMENT=${CDSS_AZURE_OPENAI_EMBEDDING_DEPLOYMENT:-text-embedding-3-large}
+      # Cosmos DB - Use deployed Azure Cosmos DB (emulator not supported on ARM64)
+      - CDSS_AZURE_COSMOS_ENDPOINT=${CDSS_AZURE_COSMOS_ENDPOINT:-}
+      - CDSS_AZURE_COSMOS_KEY=${CDSS_AZURE_COSMOS_KEY:-}
+      - CDSS_AZURE_COSMOS_DATABASE_NAME=${CDSS_AZURE_COSMOS_DATABASE_NAME:-cdss-db}
+      # Cosmos DB Emulator (commented out - not supported on ARM64/Apple Silicon)
+      # - AZURE_COSMOS_ENDPOINT=https://cosmos-emulator:8081
+      # - AZURE_COSMOS_KEY=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==
+      # - AZURE_COSMOS_DATABASE=cdss-db
+      # - AZURE_COSMOS_DISABLE_SSL_VERIFICATION=true
+      # Azure AI Search (use actual endpoint or mock)
+      - CDSS_AZURE_SEARCH_ENDPOINT=${CDSS_AZURE_SEARCH_ENDPOINT:-http://localhost:8080}
+      - CDSS_AZURE_SEARCH_API_KEY=${CDSS_AZURE_SEARCH_API_KEY:-dev-key}
+      # Document Intelligence (use actual endpoint or mock)
+      - CDSS_AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT=${CDSS_AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT:-http://localhost:8080}
+      - CDSS_AZURE_DOCUMENT_INTELLIGENCE_KEY=${CDSS_AZURE_DOCUMENT_INTELLIGENCE_KEY:-dev-key}
+      # Azurite (local Blob Storage emulator)
+      - CDSS_AZURE_BLOB_CONNECTION_STRING=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+      # Redis
+      - CDSS_REDIS_URL=redis://redis:6379/0
+      # Application Insights (disabled locally)
+      - APPLICATIONINSIGHTS_CONNECTION_STRING=
+    volumes:
+      - ./src:/app/src:ro
+    depends_on:
+      # cosmos-emulator:  # Commented out - not supported on ARM64
+      #   condition: service_healthy
+      redis:
+        condition: service_healthy
+      # azurite:  # Commented out - optional for local testing
+      #   condition: service_healthy
+    networks:
+      - cdss-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # --------------------------------------------------------------------------
+  # Azure Cosmos DB Emulator (commented out - not supported on ARM64/Apple Silicon)
+  # --------------------------------------------------------------------------
+  # cosmos-emulator:
+  #   image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
+  #   container_name: cosmos-emulator
+  #   ports:
+  #     - "8081:8081"
+  #     - "10250:10250"
+  #     - "10251:10251"
+  #     - "10252:10252"
+  #     - "10253:10253"
+  #     - "10254:10254"
+  #   environment:
+  #     - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=10
+  #     - AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE=true
+  #     - AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE=0.0.0.0
+  #   volumes:
+  #     - cosmos-data:/tmp/cosmos/appdata
+  #   networks:
+  #     - cdss-network
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -fsk https://localhost:8081/_explorer/emulator.pem || exit 1"]
+  #     interval: 15s
+  #     timeout: 10s
+  #     retries: 10
+  #     start_period: 120s
+  #   mem_limit: 3g
+  #   cpu_count: 2
+
+  # --------------------------------------------------------------------------
+  # Redis - Caching Layer
+  # --------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: cdss-redis
+    ports:
+      - "6379:6379"
+    command: >
+      redis-server
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --appendonly yes
+      --appendfsync everysec
+      --save 60 1000
+      --loglevel notice
+    volumes:
+      - redis-data:/data
+    networks:
+      - cdss-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    mem_limit: 512m
+
+  # --------------------------------------------------------------------------
+  # Azurite - Azure Blob Storage Emulator
+  # --------------------------------------------------------------------------
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    container_name: cdss-azurite
+    ports:
+      - "10000:10000"   # Blob service
+      - "10001:10001"   # Queue service
+      - "10002:10002"   # Table service
+    command: >
+      azurite
+      --blobHost 0.0.0.0 --blobPort 10000
+      --queueHost 0.0.0.0 --queuePort 10001
+      --tableHost 0.0.0.0 --tablePort 10002
+      --location /data
+      --loose
+      --skipApiVersionCheck
+    volumes:
+      - azurite-data:/data
+    networks:
+      - cdss-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 10000 || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    mem_limit: 256m
+
+# --------------------------------------------------------------------------
+# Networks
+# --------------------------------------------------------------------------
+networks:
+  cdss-network:
+    name: cdss-network
+    driver: bridge
+
+# --------------------------------------------------------------------------
+# Volumes
+# --------------------------------------------------------------------------
+volumes:
+  # cosmos-data:  # Commented out - emulator not supported on ARM64
+  #   name: cdss-cosmos-data
+  redis-data:
+    name: cdss-redis-data
+  azurite-data:
+    name: cdss-azurite-data
