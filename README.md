@@ -11,7 +11,7 @@ A production-grade clinical decision support platform that orchestrates five spe
 
 ---
 
-<img width="2183" height="2699" alt="Image" src="https://github.com/user-attachments/assets/a99c6923-65fa-4c13-be26-895d39321c54" />
+<img width="2458" height="4026" alt="Image" src="https://github.com/user-attachments/assets/32a1aadc-4d68-4ea3-b158-61b1a84a70b4" />
 
 ## Architecture
 
