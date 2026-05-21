@@ -553,7 +553,7 @@ resource gpt4oDeployment 'Microsoft.CognitiveServices/accounts/deployments@2024-
     model: {
       format: 'OpenAI'
       name: 'gpt-4o'
-      version: '2024-08-06'
+      version: '2024-11-20'
     }
     raiPolicyName: 'Microsoft.DefaultV2'
   }
@@ -573,7 +573,7 @@ resource gpt4oMiniDeployment 'Microsoft.CognitiveServices/accounts/deployments@2
     model: {
       format: 'OpenAI'
       name: 'gpt-4o-mini'
-      version: '2024-07-18'
+      version: '2024-11-20'
     }
     raiPolicyName: 'Microsoft.DefaultV2'
   }
