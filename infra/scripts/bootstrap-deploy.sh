@@ -8,7 +8,7 @@ set -euo pipefail
 
 ENVIRONMENT="${1:-}"
 RESOURCE_GROUP="${2:-}"
-LOCATION="${3:-eastus2}"
+LOCATION="${3:-swedencentral}"
 
 if [[ -z "${ENVIRONMENT}" || -z "${RESOURCE_GROUP}" ]]; then
   echo "Usage: $0 <environment> <resource-group> [location]"
