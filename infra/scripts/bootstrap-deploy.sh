@@ -12,7 +12,7 @@ LOCATION="${3:-swedencentral}"
 
 if [[ -z "${ENVIRONMENT}" || -z "${RESOURCE_GROUP}" ]]; then
   echo "Usage: $0 <environment> <resource-group> [location]"
-  echo "Example: $0 prod cdss-prod-rg eastus2"
+  echo "Example: $0 prod cdss-prod-rg swedencentral"
   echo "Optional env vars:"
   echo "  ACR_NAME=<acr-name>"
   echo "  IMAGE_TAG=<tag>"

@@ -7,11 +7,11 @@
 #   ./deploy.sh <environment> <resource-group> [location] [prod-public-api] [container-image]
 #
 # Examples:
-#   ./deploy.sh dev cdss-dev-rg eastus2
-#   ./deploy.sh staging cdss-staging-rg eastus2
-#   ./deploy.sh prod cdss-prod-rg eastus2
-#   ./deploy.sh prod cdss-prod-rg eastus2 true
-#   ./deploy.sh prod cdss-prod-rg eastus2 true myacr.azurecr.io/cdss-api:2026.03.14
+#   ./deploy.sh dev cdss-dev-rg swedencentral
+#   ./deploy.sh staging cdss-staging-rg swedencentral
+#   ./deploy.sh prod cdss-prod-rg swedencentral
+#   ./deploy.sh prod cdss-prod-rg swedencentral true
+#   ./deploy.sh prod cdss-prod-rg swedencentral true myacr.azurecr.io/cdss-api:2026.03.14
 #
 # Prerequisites:
 #   - Azure CLI installed and logged in (az login)
@@ -48,7 +48,7 @@ log_error() {
 # --- Parse arguments ---
 ENVIRONMENT="${1:-}"
 RESOURCE_GROUP="${2:-}"
-LOCATION="${3:-eastus2}"
+LOCATION="${3:-swedencentral}"
 PROD_PUBLIC_API_OVERRIDE="${4:-${PROD_PUBLIC_API:-}}"
 CONTAINER_IMAGE_OVERRIDE="${5:-${CONTAINER_IMAGE:-}}"
 ACR_NAME_OVERRIDE="${ACR_NAME:-}"
@@ -65,14 +65,14 @@ if [[ -z "$ENVIRONMENT" || -z "$RESOURCE_GROUP" ]]; then
     echo "Arguments:"
     echo "  environment     Target environment: dev, staging, or prod"
     echo "  resource-group  Azure resource group name"
-    echo "  location        Azure region (default: eastus2)"
+    echo "  location        Azure region (default: swedencentral)"
     echo "  prod-public-api Optional true/false override for prod API exposure"
     echo "  container-image Optional container image override (or use CONTAINER_IMAGE env var)"
     echo ""
     echo "Examples:"
     echo "  $0 dev cdss-dev-rg"
     echo "  $0 prod cdss-prod-rg westus2"
-    echo "  $0 prod cdss-prod-rg eastus2 true"
+    echo "  $0 prod cdss-prod-rg swedencentral true"
     echo ""
     echo "Environment variable alternative:"
     echo "  PROD_PUBLIC_API=true $0 prod cdss-prod-rg"
