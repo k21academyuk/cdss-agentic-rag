@@ -1,0 +1,9 @@
+# Query: eastus2
+
+2 results - 2 files
+
+infra\bicep\parameters.prod.json:
+  6:       "value": "swedencentral"
+
+infra\bicep\parameters.staging.json:
+  6:       "value": "swedencentral"

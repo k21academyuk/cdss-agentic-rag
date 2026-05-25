@@ -344,7 +344,7 @@ cd cdss-agentic-rag
 ```bash 
 export ENV=prod
 export RG=cdss-prod-rg
-export LOCATION=eastus2
+export LOCATION=
 export SWA_NAME=cdss-frontend-prod
 export SPA_APP_DISPLAY_NAME=cdss-frontend-spa
 export API_APP_DISPLAY_NAME=cdss-api
